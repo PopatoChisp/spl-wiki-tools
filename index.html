@@ -1,226 +1,171 @@
+<!doctype html>
 <html>
-  <head>
-    <title>Json brute vers Wiki markup</title>
-    <link rel="icon" href="squido.png">
-    <style>
-      h4 {
-        margin : 0.8em 0; }
-      div.params {
-        margin : 0.4em 0; }
-      #paramsTitle {
-        font-size : 1.2em; }
-      input[type="radio"], input[type="checkbox"] {
-       margin-right : 1;
-       margin-left : 6; }
-     #Qtypes, #insOptions {
-       margin-bottom : 1em;}
-    </style>
-  </head>
-  <body onload="updateFlVal('hltColor'); updateFlVal('btnLabel'); updateFlVal('lnBgn'); updateFlVal('lnEnd'); updateFlVal('inputDia'); updateFlVal('outputDia'); toggleDisplay('insBtn', 'insBtnDetail'); console.log('Page loaded :',  hltColor, btnLabel, lnBgn, lnEnd, inputDia, outputDia)"><!--shhh ikik-->
-    <details open>
-     <summary id="paramsTitle"><b>Paramètres</b></summary>
-     <div id="paramsMaster" class="params">
-       <!--<h4>Source :</h4>
-       <div id="game">
-         <input type="radio" name="game" id="S1" value="1">
-         <label for="S1">Splatoon</label>
-         <input type="radio" name="game" id="S2" value="2">
-         <label for="S2">Splatoon 2</label>
-         <input type="radio" name="game" id="S3" value="3" checked="checked">
-         <label for="S3">Splatoon 3</label>
-       </div>
-       <hr>
-       <div id="format">-->
-         <h4>Modèle :</h4>
-         <div id="Qtypes" class="params">
-           <input type="radio" name="qType" id="qQuote" onclick="updateTemplate(qType.qQuote)">
-           <label for="qQuote">Quote</label>
-           <input type="radio" name="qType" id="qList0" onclick="updateTemplate(qType.qList0)">
-           <label for="qList0">Puce •</label>
-           <input type="radio" name="qType" checked id="qList1" onclick="updateTemplate(qType.qList1)">
-           <label for="qList1">Puce « »</label>
-           <input type="radio" name="qType" id="qList2" onclick="updateTemplate(qType.qList2)">
-           <label for="qList2">Puce ""</label>
-           <input type="radio" name="qType" id="qJudd" onclick="updateTemplate(qType.qJudd)">
-           <label for="qJudd">JuddAdvice</label>
-           <input type="radio" name="qType" id="qNone" onclick="updateTemplate(qType.qNone)">
-           <label for="qNone">Aucun</label>
-           <br>
-           <input type="radio" name="qType" id="qMissionQuote" onclick="updateTemplate(qType.qMissionQuote)">
-           <label for="qMissionQuote">Mission quote</label>
-           <input type="radio" name="qType" id="qAmiiboQuote" onclick="updateTemplate(qType.qAmiiboQuote)">
-           <label for="qMissionQuote">amiibo quote</label>
-         </div>
-         <div id="Balises" class="params">
-           <span>
-             <label for="lnBgn">Balise de début :</label>
-             <input id="lnBgn" type="text" size=15 value="*« " onkeyup="updateFlVal('lnBgn'); updateTxt();" onchange="unselect('qType');">
-           </span>
-           <span>
-             <label for="lnEnd">Balise de fin :</label>
-             <input id="lnEnd" type="text" size=15 value=" »" onkeyup="updateFlVal('lnEnd'); updateTxt();" onchange="unselect('qType');">
-           </span>
-         </div>
-       <div id="hltColorDiv" class="params">
-         <label for="hltColor">Couleur de surlignage : {{color|_____|</label>
-         <input id="hltColor" type="text" size=15 value="orange" onkeyup="updateFlVal('hltColor'); updateTxt();">
-         }}
-       </div>
-       <div id="insOptions" class="params">
-         <input id="insTtl" type="checkbox" onchange="insOption[0] = document.getElementById('insTtl').checked; updateTxt();">
-         <label for="insTtl">Titres</label>
-         <input id="insBtn" type="checkbox" onchange="toggleDisplay('insBtn', 'insBtnDetail'); insOption[1] = document.getElementById('insBtn').checked; updateTxt();">
-         <label for="insBtn">Icônes</label>
-         <input id="insBrk" type="checkbox" onchange="insOption[2] = document.getElementById('insBrk').checked; updateTxt();">
-         <label for="insBrk">Retours à la ligne</label>
-       </div>
-       <div id="insBtnDetail" class="params">
-         <div class="params">
-           <label for="btnLabel">Modèle d'icône :</label>
-           <textarea id="btnLabel" type="text" cols="40" rows="1" style="min-height: 2em;" onkeyup="updateFlVal('btnLabel'); updateTxt();" onchange="unselect('insBtnLabel'); updateTxt();">{{Button|$BOUTON|switch}}</textarea>
-         <div>
-        <div class="params">
-            <input type="radio" checked name="insBtnLabel" id="insBtn0" onclick="document.getElementById('btnLabel').value = insBtn.button; updateFlVal('btnLabel'); updateTxt();">
-           <label for="insBtn0">Button</label>
-           <input type="radio" name="insBtnLabel" id="insBtn1" onclick="document.getElementById('btnLabel').value = insBtn.cost; updateFlVal('btnLabel'); updateTxt();">
-           <label for="insBtn1">Cost</label>
-           <input type="radio" name="insBtnLabel" id="insNone" onclick="document.getElementById('btnLabel').value = ''; updateFlVal('btnLabel'); updateTxt();">
-           <label for="insNone">Aucun</label>
-        </div>
-       </div>
-     </div>
-    </details>
-   <h3>
-      S3 - Formattage de texte
-   </h3>
-    <textarea id="inputDia" autofocus="autofocus" cols="72" rows="6" placeholder="Coller le texte à formatter ici &#10&quot;009&quot;: &quot;C'est [color=0001]Papi[color=ffff] qu'on cherche, pas un trésor. Et je pense\npas que Numéro 3 ait besoin d'un Ayo-mètre. Bref...&quot;," onpaste="updateTxt();" onchange="updateTxt()"></textarea>
-    <br>
-    <textarea id="outputDia" cols="72"
-      rows="9" placeholder="Le texte formatté s'affichera ici. Il suffira de cliquer ici pour copier le texte. &#10*« C'est {{color|Papi|orange}} qu'on cherche, pas un trésor. Et je pense pas que Numéro 3 ait besoin d'un Ayo-mètre. Bref... »" readonly="readonly" onclick=" clippy();"></textarea>
-    <br><br>
-    <!--<p id="preview"><p>-->
-    <p id="noteClippy" style="display:none;">Texte copié dans le presse-papier</p>
-    
-    <script>
-      const regSearch = {
-      // group=0001=vide? voir avec les autres langues // 0002=Stat num dynamique // 0003=Icônes // 0004=Icônes et boutons
-        reGroupAll : /\[\/?group=.*?\]/gm,
-        reGroup034 : /\[group=000(3|4).*?\]/gm,
-        reColor0   : /\[color=00.{2}\]/gm,        //balise ouverture
-        reColor1   : /\[color=.*?\]/gm,           //balise fermeture
-        };
-      const qType = { //Template/Modèle presets
-	qQuote:['{{Quote|','|$AUTEUR<ref></ref>}}'],
-	qList0:['* ', ''],
-	qList1:['* « ', ' »'],
-	qList2:['* "', '"'],
-	qJudd :['{{JuddAdvice|', '}}'],
-	qNone :['', ''],
-	qMissionQuote :['{{Mission quote|RotM|Callie|', '}}'],
-	qAmiiboQuote :['{{Amiibo quote|', '|$ACTION}}', '|translation='],
-	};
-      const insBrk = ['','<br>'] ;
-      const insBtn = {
-      button:"{{Button|$SYMBOLE|Switch}}",
-      cost:"{{Cost|S3|$CURRENCY}}", }
-      let insOption = [document.getElementById('insTtl').checked, document.getElementById('insBtn').checked, document.getElementById('insBrk').checked];
-      let hltColor, lnBgn, lnEnd, btnLabel;
 
-      async function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-        }
-      function getID (idHTML) {
-        return document.getElementById(idHTML).id ;
-        }
-      
-      function updateFlVal(idHTML) {
-        eval(getID(idHTML) + '= document.getElementById(getID(idHTML)).value');
-        return eval(getID(idHTML)) ;
-        }
-        
-      function updateTemplate(template) {
-        document.getElementById('lnBgn').value = template[0];            
-        document.getElementById('lnEnd').value = template[1];
-        updateFlVal('lnBgn');
-        updateFlVal('lnEnd');
-        updateTxt();
-        }
-       
-      function unselect(radioname) {
-        document.getElementsByName(radioname)[0].checked = true;
-        document.getElementsByName(radioname)[0].checked = false;
-      }
-      
-      function toggleDisplay(idBtn, idDis) {
-        if (document.getElementById(idBtn).checked == false) {
-          document.getElementById(idDis).style.display = "none";
-        } else {
-        document.getElementById(idDis).style.display = "block";
-        }
-      }
-      
-      function updateTxt() {
-      
-        let srcDialog = document.getElementById("inputDia").value;
-        // formattage avant conversion str en json
-        srcDialog = srcDialog.trimEnd();
-        if (srcDialog.charAt(srcDialog.length-1) == ','){
-          srcDialog = srcDialog.slice(0,srcDialog.length-1);}
-        srcDialog = srcDialog.replace(/\\n/g, " ");
-        srcDialog = srcDialog.replace(/\[page break\]/g, " ");
-        srcDialog = srcDialog.replace(/\S*\s*\{|}/g, "");
-        srcDialog = '{' + srcDialog + '}';
-        console.log('json format :' + srcDialog)
-        srcDialog= JSON.parse(srcDialog);
-        
-        //creation str sortie ligne par ligne
-        let newDialog = "" ;
-        if (insOption[0] == 0) {
-          for (let x in srcDialog) {
-            newDialog = newDialog + lnBgn + srcDialog[x] + lnEnd + insBrk[insOption[2]? 1 : 0] + "\n";
-        }} else {
-          for (let x in srcDialog) {
-            newDialog = newDialog + x + " :\n";
-            newDialog = newDialog + lnBgn + srcDialog[x] + lnEnd + insBrk[insOption[2]? 1 : 0] + "\n";
+<head>
+  <title>Json brute vers Wiki markup</title>
+  <link rel="icon" href="squido.png">
+  <script type="module" src="index.js" defer></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=LXGW+Marker+Gothic&display=swap');
+
+    body {
+      width: 600px;
+      position: relative;
+      font-family: "LXGW Marker Gothic", sans-serif;
+    }
+
+    h4 {
+      margin: 0.8em 0;
+    }
+
+    div.params,
+    div.params-templates {
+      margin: 0.4em 0;
+    }
+
+    #paramsTitle {
+      font-size: 1.2em;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin-right: 1;
+      margin-left: 6;
+    }
+
+    #Qtypes,
+    #insOptions {
+      margin-bottom: 1em;
+    }
+
+    #langtoggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      margin: 0;
+    }
+
+    div#langtoggle {
+      background: lightgrey;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-around;
+      width: 70px;
+      height: 2em;
+      border-radius: 4px;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+    }
+
+    #langtoggle span {
+      padding: 0.2em;
+      position: relative;
+      z-index: 1;
+      cursor: pointer;
+    }
+
+    div#langSW {
+      position: absolute;
+      background: white;
+      width: 2.8ch;
+      height: 1.4em;
+      z-index: 0;
+      border-radius: 3px;
+      left: 4px;
+      transition: all 0.2s cubic-bezier(0.3, 0.0, 0.5, 1);
+    }
+  </style>
+</head>
+
+<body>
+  <details open>
+    <summary id="paramsTitle">
+      <b>Paramètres</b>
+    </summary>
+    <div id="langtoggle">
+      <span id="langFR">FR</span>
+      <span id="langEN">EN</span>
+      <div id="langSW"></div>
+    </div>
+    <div id="paramsMaster">
+      <h4 id="lanTemplate">Modèle :</h4>
+      <div id="Qtypes" class="params-templates">
+        <input type="radio" name="qType" id="qQuote">
+        <label for="qQuote">Quote</label>
+        <input type="radio" name="qType" id="qList0">
+        <label for="qList0" id="lanqList0">Puce •</label>
+        <input type="radio" name="qType" checked id="qList1">
+        <label for="qList1" id="lanqList1">Puce « »</label>
+        <input type="radio" name="qType" id="qList2">
+        <label for="qList2" id="lanqList2">Puce ""</label>
+        <input type="radio" name="qType" id="qJudd">
+        <label for="qJudd">JuddAdvice</label>
+        <input type="radio" name="qType" id="qNone">
+        <label for="qNone" id="lanNone">Aucun</label>
+        <br>
+        <input type="radio" name="qType" id="qMissionQuote">
+        <label for="qMissionQuote">Mission quote</label>
+        <input type="radio" name="qType" id="qAmiiboQuote">
+        <label for="qAmiiboQuote">amiibo quote</label>
+      </div>
+      <div id="Balises" class="params">
+        <span>
+          <label for="lnBgn">Balise de début :</label>
+          <input type="text" id="lnBgn" class="refreshed inputVal" size=15 value="*« ">
+        </span>
+        <span>
+          <label for="lnEnd">Balise de fin :</label>
+          <input type="text" id="lnEnd" class="refreshed inputVal" size=15 value=" »">
+        </span>
+      </div>
+      <div id="hltColorDiv" class="params">
+        <label for="hltColor">Couleur de surlignage : {{color|_____|</label>
+        <input type="text" id="hltColor" class="refreshed inputVal" size=15 value="orange">
         }}
-        //remplace toutes balises de couleurs, et de "group" qui sont des boutons ou symboles
-        newDialog = newDialog.replace(regSearch.reColor0, '{{color|');
-        newDialog = newDialog.replace(regSearch.reColor1, '|'+hltColor+'}}');
-        if (insOption[1] == 1) {
-          newDialog = newDialog.replace(regSearch.reGroup034, btnLabel);
-          newDialog = newDialog.replace(regSearch.reGroupAll, '');
-        } else {
-          newDialog = newDialog.replace(regSearch.reGroupAll, '');
-        }
-      
-        document.getElementById("outputDia").value = newDialog ;
-      
-        //document.getElementById("preview").innerHTML = newDialog ;
-      }
-      //page made by popamolamola aka mioumi :3
-      //section insertion dans presse-papier
-      const lGrey = "rgba(230,230,230,"
-      async function clippy () {
-      
-        if (document.getElementById("outputDia").value != '') {
-          navigator.clipboard.writeText(document.getElementById("outputDia").value);
-          document.getElementById("outputDia").style.background = lGrey+ "1)";
-          document.getElementById("noteClippy").style.display = 'inline';
-          let y = 5;
-          while (y != 0){
-              y--
-              document.getElementById("outputDia").style.background = lGrey + y/5 + ")";
-              await sleep(50);
-              }
-          document.getElementById("outputDia").style.background = lGrey + "0)" ; //shhhh its bad animation ikik
-          await sleep(1500);  
-          document.getElementById("noteClippy").style.display = 'none';
-        }
-      }
+      </div>
+      <div id="insOptions" class="params">
+        <input type="checkbox" id="insTtl" class="refreshed inputCheck">
+        <label for="insTtl">Titres</label>
+<!--         <input type="checkbox"  id="insBtn"class="refreshed inputCheck">
+        <label for="insBtn">Icônes</label> -->
+        <input type="checkbox" id="insBrkIN" class="refreshed inputCheck">
+        <label for="insBrkIN">
+          Sauts de lignes internes
+        </label>
+        <input type="checkbox" id="insBrk" class="refreshed inputCheck">
+        <label for="insBrk">
+          Sauts de fin de ligne
+        </label>
+      </div>
+<!--       <div id="insBtnDetail" class="params-templates">
+        <div class="params">
+          <label for="btnLabel">Modèle d'icône :</label>
+          <input type="text" id="btnLabel" class="refreshed inputVal" type="text" cols="40" size="30" value="{{Button|$BOUTON|switch}}"></input>
+        </div>
+        <div class="params-templates">
+          <input type="radio" checked name="insBtnLabel" id="insBtn0">
+          <label for="insBtn0">Button</label>
+          <input type="radio" name="insBtnLabel" id="insBtn1">
+          <label for="insBtn1">Cost</label>
+          <input type="radio" name="insBtnLabel" id="insNone">
+          <label for="insNone" id="lanNone2">Aucun</label> -->
+        </div>
+      </div>
+    </div>
+  </details>
+  <h3 id="lanFormatting">
+    Formattage de texte
+  </h3>
+  <textarea id="inputDia" autofocus="autofocus" cols="72" rows="6"
+    placeholder="Coller le texte à formatter ici &#10&quot;009&quot;: &quot;C'est [color=0001]Papi[color=ffff] qu'on cherche, pas un trésor. Et je pense\npas que Numéro 3 ait besoin d'un Ayo-mètre. Bref...&quot;,"></textarea>
+  <br>
+  <textarea id="outputDia" cols="72" rows="9"
+    placeholder="Le texte formatté s'affichera ici. Il suffira de cliquer ici pour copier le texte. &#10*« C'est {{color|Papi|orange}} qu'on cherche, pas un trésor. Et je pense pas que Numéro 3 ait besoin d'un Ayo-mètre. Bref... »"
+    readonly="readonly"></textarea>
+  <br><br>
+  <!--<p id="preview"><p>-->
+  <p id="noteClippy" style="display:none;">Texte copié dans le presse-papier</p>
+</body>
 
-    </script> 
-  </body>
 </html>
-
-
-
